@@ -1,5 +1,12 @@
-﻿@page "/"
+﻿@using BlazorApiClient.Models
+@page "/"
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Please Log In</h1>
+<EditForm Model="login" OnValidSubmit="HandleValidSubmit">
+	<InputText @bind-bind-Value="login.UserName"/>
+	<InputText type="password" @bind-Value="login.Password"/>
+	<button class="btn btn-success" type="submit">Log In</button>
+</EditForm>
+
