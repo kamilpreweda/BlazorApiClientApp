@@ -1,12 +1,44 @@
-﻿@using BlazorApiClient.Models
-@page "/"
+﻿@page "/"
+@using BlazorApiClient.Models
+@using System.Net.Http.Json
+@inject IHttpClientFactory factory
+@inject TokenModel tokeninfo
 
 <PageTitle>Index</PageTitle>
 
-<h1>Please Log In</h1>
+@if (isLoggedIn)
+{
+	<h1>You are logged in</h1>
+	<button class="btn btn-danger" @onclick="LogOut">Log Out</button>
+}
+else
+{
+	<h1>Please Log In</h1>
 <EditForm Model="login" OnValidSubmit="HandleValidSubmit">
 	<InputText @bind-bind-Value="login.UserName"/>
 	<InputText type="password" @bind-Value="login.Password"/>
 	<button class="btn btn-success" type="submit">Log In</button>
 </EditForm>
+}
 
+@code{
+	private AuthenticationModel login = new();
+	private bool isLoggedIn = false;
+	protected override void OnInitialized()
+	{
+		isLoggedIn = !string.IsNullOrWhiteSpace(tokeninfo.Token);
+	}
+	private async void HandleValidSubmit()
+	{
+		var client = factory.CreateClient("api");
+		var info = await client.PostAsJsonAsync<AuthenticationModel>("Authentication/token", login);
+		tokeninfo.Token = await info.Content.ReadAsStringAsync();
+		isLoggedIn = true;
+		await InvokeAsync(StateHasChanged);
+	}
+	private void LogOut()
+	{
+		tokeninfo.Token = "";
+		isLoggedIn = false;
+	}
+}
