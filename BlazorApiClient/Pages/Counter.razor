@@ -7,6 +7,10 @@
 <PageTitle>Counter</PageTitle>
 
 <h1>ToDo List</h1>
+@if (string.IsNullOrWhiteSpace(errorMessage) == false)
+{
+    <div class="h3 text-danger">@errorMessage</div>
+}
 
 <button class="btn btn-primary" @onclick="FetchTodos">Get ToDoList</button>
 @if (todos is not null)
@@ -29,12 +33,20 @@
 @code {
     private List<TodoModel>? todos;
     private HttpClient? client;
+    private string? errorMessage;
 
     private async void FetchTodos()
     {
         client = factory.CreateClient("api");
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenInfo.Token);
-        todos = await client.GetFromJsonAsync<List<TodoModel>>("Todos");
+        try
+        {
+            todos = await client.GetFromJsonAsync<List<TodoModel>>("Todos");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
         await InvokeAsync(StateHasChanged);
     }
 }
