@@ -9,7 +9,23 @@
 <h1>ToDo List</h1>
 
 <button class="btn btn-primary" @onclick="FetchTodos">Get ToDoList</button>
+@if (todos is not null)
+{
+    @foreach (var t in todos)
+    {
+        if (t.IsComplete)
+        {
+            <div class="h2">@t.Task (Completed)</div>
 
+        }
+        else
+        {
+            <div class="h2">
+                @t.Task
+            </div>
+        }
+    }
+}
 @code {
     private List<TodoModel>? todos;
     private HttpClient? client;
