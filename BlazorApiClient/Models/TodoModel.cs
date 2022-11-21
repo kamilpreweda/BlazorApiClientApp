@@ -1,6 +1,6 @@
 ﻿namespace BlazorApiClient.Models
 {
-    public class TodoModel
+    public class ToDoModel
     {
         public int Id { get; set; }
         public string? Task { get; set; }

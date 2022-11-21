@@ -26,27 +26,36 @@
         {
             <div class="h2">
                 @t.Task
+                <button class="btn btn-sm btn-primary"
+                    @onclick="()=>CompleteTodo(t)">Complete</button>
             </div>
         }
     }
 }
 @code {
-    private List<TodoModel>? todos;
+    private List<ToDoModel>? todos;
     private HttpClient? client;
     private string? errorMessage;
 
     private async void FetchTodos()
     {
+        errorMessage = "";
         client = factory.CreateClient("api");
-        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenInfo.Token);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
         try
         {
-            todos = await client.GetFromJsonAsync<List<TodoModel>>("Todos");
+            todos = await client.GetFromJsonAsync<List<ToDoModel>>("ToDos");
         }
         catch (Exception ex)
         {
             errorMessage = ex.Message;
         }
+        await InvokeAsync(StateHasChanged);
+    }
+    private async void CompleteTodo(ToDoModel todo)
+    {
+        await client!.PutAsJsonAsync<string>($"Todos/{todo.Id}/Complete", "");
+        todo.IsComplete = true;
         await InvokeAsync(StateHasChanged);
     }
 }
