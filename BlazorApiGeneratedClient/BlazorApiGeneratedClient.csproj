@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\swagger.json" CodeGenerator="NSwagCSharp" Namespace="BlazorApiGeneratedClient.Services" ClassName="TodoApi">
+    <None Include="OpenAPIs\swagger.json" ClassName="TodoApi" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <OpenApiReference Include="OpenAPIs\swagger1.json" CodeGenerator="NSwagCSharp" Namespace="BlazorApiGeneratedClient.Services" ClassName="TodoApi">
       <SourceUri>http://localhost:5287/swagger/v1/swagger.json</SourceUri>
     </OpenApiReference>
   </ItemGroup>
