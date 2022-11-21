@@ -7,3 +7,10 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@code {
+	private void DoSomething(){
+		BlazorApiGeneratedClient.Services.TodoApi test = new("http://localhost:5287/api", new HttpClient());
+		// test.
+	}
+}
